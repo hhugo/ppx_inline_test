@@ -342,22 +342,22 @@ let parse_argv ?current args =
            , " Prefix to prepend to filepaths in test output" )
          ])
       (fun anon ->
-        raise
-          (Arg.Bad (Printf.sprintf "%s: unexpected anonymous argument %s\n%!" name anon)))
+         raise
+           (Arg.Bad (Printf.sprintf "%s: unexpected anonymous argument %s\n%!" name anon)))
       (Printf.sprintf "%s %s %s [args]" name "inline-test-runner" lib);
     Action.set
       (`Test_mode
-        { which_tests =
-            { libname = lib
-            ; only_test_location = !tests
-            ; which_tags = !tag_predicate
-            ; name_filter = !name_filter
-            }
-        ; what_to_do =
-            (match !list_partitions with
-             | Some where_to_list -> `List_partitions where_to_list
-             | None -> `Run_partition !partition)
-        })
+          { which_tests =
+              { libname = lib
+              ; only_test_location = !tests
+              ; which_tags = !tag_predicate
+              ; name_filter = !name_filter
+              }
+          ; what_to_do =
+              (match !list_partitions with
+               | Some where_to_list -> `List_partitions where_to_list
+               | None -> `Run_partition !partition)
+          })
   | _ -> ()
 ;;
 
@@ -467,22 +467,22 @@ let string_of_module_descr () =
 let position_match def_filename def_line_number l =
   List.exists
     (fun (filename, line_number_opt, used) ->
-      let position_start = String.length def_filename - String.length filename in
-      let found =
-        position_start >= 0
-        &&
-        let end_of_def_filename =
-          String.sub def_filename position_start (String.length filename)
-        in
-        end_of_def_filename = filename
-        && (position_start = 0 || def_filename.[position_start - 1] = '/')
-        &&
-        match line_number_opt with
-        | None -> true
-        | Some line_number -> def_line_number = line_number
-      in
-      if found then used := true;
-      found)
+       let position_start = String.length def_filename - String.length filename in
+       let found =
+         position_start >= 0
+         &&
+         let end_of_def_filename =
+           String.sub def_filename position_start (String.length filename)
+         in
+         end_of_def_filename = filename
+         && (position_start = 0 || def_filename.[position_start - 1] = '/')
+         &&
+         match line_number_opt with
+         | None -> true
+         | Some line_number -> def_line_number = line_number
+       in
+       if found then used := true;
+       found)
     l
 ;;
 
@@ -504,11 +504,13 @@ let print_delayed_errors () =
 let eprintf_or_delay fmt =
   Printf.ksprintf
     (fun s ->
-      if !verbose then delayed_errors := s :: !delayed_errors else Printf.eprintf "%s%!" s;
-      if !stop_on_error
-      then (
-        print_delayed_errors ();
-        exit 2))
+       if !verbose
+       then delayed_errors := s :: !delayed_errors
+       else Printf.eprintf "%s%!" s;
+       if !stop_on_error
+       then (
+         print_delayed_errors ();
+         exit 2))
     fmt
 ;;
 
@@ -528,15 +530,15 @@ let hum_backtrace backtrace =
 ;;
 
 let[@inline never] test_inner
-  ~config
-  ~descr
-  ~tags
-  ~filename:def_filename
-  ~line_number:def_line_number
-  ~start_pos
-  ~end_pos
-  f
-  bool_of_f
+                     ~config
+                     ~descr
+                     ~tags
+                     ~filename:def_filename
+                     ~line_number:def_line_number
+                     ~start_pos
+                     ~end_pos
+                     f
+                     bool_of_f
   =
   match Action.get () with
   | `Ignore -> ()
@@ -646,14 +648,14 @@ let test_unit ~config ~descr ~tags ~filename ~line_number ~start_pos ~end_pos f 
 ;;
 
 let[@inline never] test_module
-  ~config
-  ~descr
-  ~tags
-  ~filename:def_filename
-  ~line_number:def_line_number
-  ~start_pos
-  ~end_pos
-  f
+                     ~config
+                     ~descr
+                     ~tags
+                     ~filename:def_filename
+                     ~line_number:def_line_number
+                     ~start_pos
+                     ~end_pos
+                     f
   =
   match Action.get () with
   | `Ignore -> ()
@@ -769,9 +771,9 @@ let summarize () =
             "ppx_inline_test error: the following -only-test flags matched nothing:";
           List.iter
             (fun (filename, line_number_opt, _) ->
-              match line_number_opt with
-              | None -> Printf.eprintf " %s" filename
-              | Some line_number -> Printf.eprintf " %s:%d" filename line_number)
+               match line_number_opt with
+               | None -> Printf.eprintf " %s" filename
+               | Some line_number -> Printf.eprintf " %s:%d" filename line_number)
             tests;
           Printf.eprintf ".\n%!";
           Test_result.Error
